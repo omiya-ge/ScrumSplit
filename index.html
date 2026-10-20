@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScrumSplit</title>
+  <meta name="description" content="中綴じ・スクラム製本の冊子をばらしてスキャンした PDF を、元の単ページ PDF に戻します。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='3' y='6' width='12' height='20' rx='1.5' fill='%233a6ff7'/><rect x='17' y='6' width='12' height='20' rx='1.5' fill='%2395b2ff'/></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>ScrumSplit</h1>
+  </header>
+
+  <main>
+    <label id="dropzone" class="dropzone">
+      <input id="file-input" type="file" accept="application/pdf,.pdf">
+      <span class="dz-main">スキャンした PDF をドロップ</span>
+      <span class="dz-sub">またはクリックして選択</span>
+      <span id="file-info" class="dz-file"></span>
+    </label>
+
+    <div id="workspace" hidden>
+      <form id="settings" class="settings" onsubmit="return false">
+        <fieldset>
+          <legend>製本の向き</legend>
+          <div class="seg">
+            <label><input type="radio" name="binding" value="left" checked><span>左とじ<small>横書き</small></span></label>
+            <label><input type="radio" name="binding" value="right"><span>右とじ<small>縦書き</small></span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>スキャンした面</legend>
+          <div class="seg">
+            <label><input type="radio" name="firstFace" value="outside" checked><span>外側が上<small>表紙側から</small></span></label>
+            <label><input type="radio" name="firstFace" value="inside"><span>内側が上<small>中央の見開きから</small></span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>スキャンの向き</legend>
+          <div class="seg">
+            <label><input type="radio" name="rotation" value="0" checked><span>読める向き</span></label>
+            <label><input type="radio" name="rotation" value="180"><span>逆向き<small>180°</small></span></label>
+          </div>
+        </fieldset>
+
+        <details>
+          <summary>詳細設定</summary>
+          <div class="advanced">
+            <label class="check"><input type="checkbox" name="backFlipped"> 裏面（偶数枚目のスキャン）だけ上下が逆</label>
+            <label class="check"><input type="checkbox" name="reverseSheets"> 紙の順番を逆にする</label>
+            <label class="select">横向きスキャンの補正
+              <select name="quarterTurn">
+                <option value="0" selected>なし</option>
+                <option value="90">右に 90° 回す</option>
+                <option value="270">左に 90° 回す</option>
+              </select>
+            </label>
+          </div>
+        </details>
+      </form>
+
+      <section class="preview-area" aria-labelledby="preview-title">
+        <div class="preview-head">
+          <h2 id="preview-title">プレビュー</h2>
+          <span id="preview-note"></span>
+        </div>
+        <p id="warning" class="warning" hidden></p>
+        <div id="preview" class="preview"></div>
+      </section>
+
+      <section class="export">
+        <label class="filename">ファイル名
+          <input id="filename" type="text" spellcheck="false">
+        </label>
+        <div class="buttons">
+          <button id="download" type="button" class="primary">ダウンロード</button>
+          <button id="save-as" type="button" hidden>名前を付けて保存…</button>
+        </div>
+      </section>
+    </div>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+
+  <footer>
+    <a href="https://github.com/mozilla/pdf.js">pdf.js</a> と <a href="https://pdf-lib.js.org/">pdf-lib</a> を使用しています。
+  </footer>
+</body>
+</html>
